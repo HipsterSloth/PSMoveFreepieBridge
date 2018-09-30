@@ -8,7 +8,7 @@ for /f "usebackq delims=" %%I in (`powershell %psCommand%`) do set "PSM_ROOT_PAT
 if NOT DEFINED PSM_ROOT_PATH (goto failure)
 
 :: Find the distribution folder
-For /D %%D in ("%PSM_ROOT_PATH%\PSMoveService_*") Do (
+For /D %%D in ("%PSM_ROOT_PATH%\dist") Do (
     set "DISTRIBUTION_FOLDER=%%~fD"
 )
 if NOT DEFINED DISTRIBUTION_FOLDER (
