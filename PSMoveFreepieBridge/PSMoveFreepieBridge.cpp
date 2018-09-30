@@ -67,7 +67,7 @@ void prompt_arguments(eDeviceType &deviceType, int32_t &deviceCount, int* device
 bool parse_arguments(
     int argc, 
     char** argv, 
-    eDeviceType deviceType, 
+    eDeviceType &deviceType, 
     int32_t &deviceCount, 
     PSMControllerID* deviceIDs, 
     PSMTrackingColorType* bulbColors,
@@ -82,7 +82,15 @@ bool parse_arguments(
 			deviceType= _deviceTypeController;
 		}
 		else if ((strcmp(argv[index], "-hmd") == 0) && deviceCount < 1) {
-			deviceType= _deviceTypeHMD;
+			deviceType = _deviceTypeHMD;
+			deviceCount = 1;
+
+			// set the HMD id if specified
+			index++;
+			if ((index < argc) && isdigit(*argv[index]))
+				deviceIDs[0] = atoi(argv[index]);
+
+			index++;
 		}
 		else if ((strcmp(argv[index], "-t") == 0) && deviceCount < 1) {
 			index++;
