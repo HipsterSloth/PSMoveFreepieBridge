@@ -1,7 +1,16 @@
 #include "stdafx.h"
 #include "FreepieMoveClient.h"
 
-void prompt_arguments(eDeviceType &deviceType, int32_t &deviceCount, int* deviceIDs, PSMTrackingColorType* bulbColors, int32_t &triggerAxis) {
+void prompt_arguments(eDeviceType &deviceType, int32_t &deviceCount, int* deviceIDs, PSMTrackingColorType* bulbColors, int32_t &triggerAxis, std::string &hostAddress) {
+
+	std::string psmServerAddress;
+	std::cout << "Host Address (default=localhost): ";
+	std::getline(std::cin, psmServerAddress);
+	if (psmServerAddress.length() > 0)
+	{
+		hostAddress = psmServerAddress;
+	}
+
 	int rawDeviceType= 0;
 	std::cout << "1) HMD " << std::endl;
 	std::cout << "2) Controllers " << std::endl;
@@ -72,6 +81,7 @@ bool parse_arguments(
     PSMControllerID* deviceIDs, 
     PSMTrackingColorType* bulbColors,
     int32_t &triggerAxis,
+	std::string &hostAddress,
     bool &bExitWithPSMoveService) 
 {
 	bool bSuccess = true;
@@ -149,6 +159,14 @@ bool parse_arguments(
 			bExitWithPSMoveService = true;
 			index++;
 		}
+		else if ((strcmp(argv[index], "-ip") == 0) && deviceCount < 1) {
+			index++;
+
+			if (index < argc) {
+				hostAddress = argv[index];
+				index++;
+			}
+		}
 		else {
 			std::cout << "Unrecognized command line argument " << argv[index] << std::endl;
 			bSuccess = false;
@@ -183,22 +201,23 @@ int main(int argc, char** argv)
 	int deviceIDs[4];
 	int32_t freepieIndicies[4] = { 0, 1, 2, 3 };
     int32_t triggerAxis= -1;
+	std::string hostAddress= PSMOVESERVICE_DEFAULT_ADDRESS;
 	PSMTrackingColorType bulbColors[4] = { PSMTrackingColorType_MaxColorTypes, PSMTrackingColorType_MaxColorTypes, PSMTrackingColorType_MaxColorTypes, PSMTrackingColorType_MaxColorTypes };
 	bool bRun = true;
 	bool bExitWithPSMoveService = false;
 
 	if (argc == 1) {
-		prompt_arguments(deviceType, deviceCount, deviceIDs, bulbColors, triggerAxis);
+		prompt_arguments(deviceType, deviceCount, deviceIDs, bulbColors, triggerAxis, hostAddress);
 	}
 	else {
-		if (!parse_arguments(argc, argv, deviceType, deviceCount, deviceIDs, bulbColors, triggerAxis, bExitWithPSMoveService)) {
+		if (!parse_arguments(argc, argv, deviceType, deviceCount, deviceIDs, bulbColors, triggerAxis, hostAddress, bExitWithPSMoveService)) {
 			std::cout << "Command line arguments are not valid." << std::endl;
 			bRun = false;;
 		}
 	}
 
 	if (bRun) {
-		FreepieMoveClient* client = new FreepieMoveClient();
+		FreepieMoveClient* client = new FreepieMoveClient(hostAddress);
 		client->run(deviceType, deviceCount, deviceIDs, bulbColors, freepieIndicies, deviceCount < 2, triggerAxis);
 	}
 
