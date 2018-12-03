@@ -13,7 +13,8 @@
 
 __declspec(dllexport) void WriteToFreepie(freepie_io_6dof_data data, int32_t freepieIndex = 0);
 
-FreepieMoveClient::FreepieMoveClient()
+FreepieMoveClient::FreepieMoveClient(const std::string &hostAddress)
+	: m_hostAddress(hostAddress)
 {
 }
 
@@ -176,7 +177,7 @@ bool FreepieMoveClient::startup()
 	// Attempt to connect to the server
 	if (success)
 	{
-		if (PSM_InitializeAsync("localhost", "9512") == PSMResult_Error)
+		if (PSM_InitializeAsync(m_hostAddress.c_str(), "9512") == PSMResult_Error)
 		{
 			std::cout << "FreepieMoveClient - Failed to initialize the client network manager" << std::endl;
 			success = false;

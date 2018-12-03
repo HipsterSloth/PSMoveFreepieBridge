@@ -14,7 +14,7 @@ enum eDeviceType
 class FreepieMoveClient
 {
 public:
-	FreepieMoveClient();
+	FreepieMoveClient(const std::string &hostAddress);
 	~FreepieMoveClient();
 
 	int run(
@@ -39,6 +39,7 @@ public:
 
 private:
 	bool m_keepRunning = true;
+	std::string m_hostAddress;
     eDeviceType m_device_type;
     PSMHeadMountedDisplay *hmd_views[4] = { nullptr, nullptr, nullptr, nullptr };
 	PSMController *controller_views[4] = { nullptr, nullptr, nullptr, nullptr };
