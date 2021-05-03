@@ -1,6 +1,9 @@
+# NOTICE OF ARCHIVAL
+This project is no longer in development and is now archived. Anyone that wants to continue work on this project is welcome in their own fork, but repo is no longer accepting pull requests, considering any issues, anwswering questions, or offering support. WYSIWYG.
+
 # README #
 
-PSMoveFreepieBridge is a client for [PSMoveService](https://github.com/cboulay/PSMoveService) that takes the location and rotation data of a controller and passes it into [FreePIE](https://andersmalmgren.github.io/FreePIE/).
+PSMoveFreepieBridge is a client for [PSMoveService](https://github.com/psmoveservice/PSMoveService) that takes the location and rotation data of a controller and passes it into [FreePIE](https://andersmalmgren.github.io/FreePIE/).
 
 Releases can be found on the [Downloads](https://bitbucket.org/hawkinse/psmovefreepiebridge/downloads) page.
 
